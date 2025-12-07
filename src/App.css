@@ -1,0 +1,29 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.services-container {
+  flex: 1;
+  padding: 4rem 2rem 4rem 2rem;
+  background: linear-gradient(135deg, var(--color-background) 0%, color-mix(in srgb, var(--color-background) 95%, var(--color-lightest-gray)) 100%);
+}
+
+.services-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .services-container {
+    padding: 1rem;
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}

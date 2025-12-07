@@ -1,0 +1,151 @@
+.service-card {
+  background: var(--color-lightest-gray);
+  border-radius: 16px;
+  padding: 0;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-darkest) 8%, transparent);
+  transition: all 0.3s ease;
+  border: 1px solid color-mix(in srgb, var(--color-darkest) 10%, transparent);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.service-card.clickable {
+  cursor: pointer;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-darkest) 15%, transparent);
+  border-color: color-mix(in srgb, var(--color-darkest) 20%, transparent);
+}
+
+.service-card.clickable:active {
+  transform: translateY(-2px);
+}
+
+.service-card-header {
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.service-title-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.service-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--color-darkest) 5%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.service-card:hover .service-icon-wrapper {
+  background: color-mix(in srgb, var(--color-darkest) 10%, transparent);
+  transform: scale(1.05);
+}
+
+.service-icon {
+  font-size: 1.5rem;
+  color: var(--color-darkest);
+  opacity: 0.9;
+}
+
+.service-status-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+.status-dot {
+  background-color: var(--status-color, var(--color-darkest));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-color, var(--color-darkest)) 20%, transparent);
+}
+
+/* Fallback colors if status colors not configured */
+.status-dot.status-running {
+  background-color: var(--status-color, var(--color-darkest));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-color, var(--color-darkest)) 20%, transparent);
+}
+
+.status-dot.status-stopped {
+  background-color: var(--status-color, var(--color-light-gray));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-color, var(--color-light-gray)) 20%, transparent);
+}
+
+.status-dot.status-error {
+  background-color: var(--status-color, var(--color-darkest));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-color, var(--color-darkest)) 20%, transparent);
+}
+
+.status-dot.status-warning {
+  background-color: var(--status-color, var(--color-lighter-gray));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-color, var(--color-lighter-gray)) 20%, transparent);
+}
+
+.service-card-content {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.service-name {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-darkest);
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+
+.service-description {
+  color: var(--color-darkest);
+  margin: 0;
+  line-height: 1.6;
+  font-size: 0.875rem;
+  opacity: 0.75;
+  flex: 1;
+}
+
+.service-footer {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-darkest) 8%, transparent);
+}
+
+.status-label {
+  text-transform: uppercase;
+  color: var(--color-darkest);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+
