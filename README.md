@@ -11,6 +11,15 @@ A lightweight React TypeScript static website to display machine information and
 - Customizable theme and colors
 - Docker support for easy deployment
 
+## Setup for CI/CD
+
+To enable automatic Docker Hub pushes, add these secrets to your GitHub repository:
+
+1. Go to **Settings** → **Secrets and variables** → **Actions**
+2. Add the following secrets:
+   - `DOCKERHUB_USERNAME` - Your Docker Hub username
+   - `DOCKERHUB_TOKEN` - Your Docker Hub access token (create one at https://hub.docker.com/settings/security)
+
 ## Downloads
 
 Pre-built packages are automatically created on every push to main/master:
@@ -25,15 +34,19 @@ The build artifacts contain the complete static website ready to deploy. No need
 
 ## Docker
 
-### Build the Docker image
+### Pull from Docker Hub
+
+Pre-built Docker images are automatically pushed to Docker Hub on every push to main/master:
+
+```bash
+docker pull <your-dockerhub-username>/fzlaunchpad:latest
+docker run -d -p 8080:80 <your-dockerhub-username>/fzlaunchpad:latest
+```
+
+### Build the Docker image locally
 
 ```bash
 docker build -t fzlaunchpad .
-```
-
-### Run the container
-
-```bash
 docker run -d -p 8080:80 fzlaunchpad
 ```
 
