@@ -37,7 +37,7 @@ function App() {
       setServicesLoading(false);
 
       // Then check health status for all services
-      const healthResults = await checkMultipleServices(servicesList);
+      const healthResults = await checkMultipleServices(servicesList, config.statusMapping);
       
       // Update services with actual status and status code
       setServices(prevServices => 
@@ -53,8 +53,8 @@ function App() {
 
     // Set up periodic health checks (every 30 seconds)
     const intervalId = setInterval(async () => {
-      if (servicesList) {
-        const healthResults = await checkMultipleServices(servicesList);
+      if (servicesList && config) {
+        const healthResults = await checkMultipleServices(servicesList, config.statusMapping);
         setServices(prevServices => 
           prevServices.map((service, index) => ({
             ...service,
@@ -73,6 +73,8 @@ function App() {
     if (config) {
       const root = document.documentElement;
       const colors = config.theme.colors;
+      const bgImage = config.theme.backgroundImage;
+      
       root.style.setProperty('--color-background', colors.background);
       root.style.setProperty('--color-lightest-gray', colors.cardBackground);
       root.style.setProperty('--color-lighter-gray', colors.mediumAccent);
@@ -82,6 +84,22 @@ function App() {
       root.style.setProperty('--color-header-text', colors.headerText);
       root.style.setProperty('--color-footer-background', colors.footerBackground || colors.background);
       root.style.setProperty('--color-footer-text', colors.footerText || colors.text);
+
+      // Apply background image
+      if (bgImage?.url) {
+        const opacity = bgImage.opacity ?? 0.1;
+        const position = bgImage.position || 'center';
+        const size = bgImage.size || 'cover';
+        const repeat = bgImage.repeat || 'no-repeat';
+        
+        root.style.setProperty('--bg-image-url', `url(${bgImage.url})`);
+        root.style.setProperty('--bg-image-opacity', opacity.toString());
+        root.style.setProperty('--bg-image-position', position);
+        root.style.setProperty('--bg-image-size', size);
+        root.style.setProperty('--bg-image-repeat', repeat);
+      } else {
+        root.style.setProperty('--bg-image-url', 'none');
+      }
     }
   }, [config]);
 

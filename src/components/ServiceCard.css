@@ -13,9 +13,11 @@
 
 .service-card.clickable {
   cursor: pointer;
+  border-color: color-mix(in srgb, var(--color-darkest) 20%, transparent);
+  border-width: 2px;
 }
 
-.service-card:hover {
+.service-card.clickable:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px color-mix(in srgb, var(--color-darkest) 15%, transparent);
   border-color: color-mix(in srgb, var(--color-darkest) 20%, transparent);
@@ -50,7 +52,7 @@
   flex-shrink: 0;
 }
 
-.service-card:hover .service-icon-wrapper {
+.service-card.clickable:hover .service-icon-wrapper {
   background: color-mix(in srgb, var(--color-darkest) 10%, transparent);
   transform: scale(1.05);
 }
@@ -134,6 +136,7 @@
 .service-footer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-top: 0.5rem;
   padding-top: 0.75rem;
   border-top: 1px solid color-mix(in srgb, var(--color-darkest) 8%, transparent);
@@ -146,6 +149,20 @@
   font-size: 0.75rem;
   letter-spacing: 0.05em;
   opacity: 0.7;
+}
+
+.clickable-indicator {
+  display: flex;
+  align-items: center;
+  color: var(--color-darkest);
+  opacity: 0.6;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.service-card.clickable:hover .clickable-indicator {
+  opacity: 1;
+  transform: translateX(2px);
 }
 
 

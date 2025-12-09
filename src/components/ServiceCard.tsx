@@ -1,13 +1,15 @@
 import type { IconType } from 'react-icons';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import './ServiceCard.css';
 import { useConfig } from '../hooks/useConfig';
 import { getStatusColorForCode } from '../utils/statusColor';
+import type { ServiceStatus } from '../utils/healthCheck';
 
 export interface Service {
   id: string;
   name: string;
   description: string;
-  status: 'running' | 'stopped' | 'error' | 'warning';
+  status: ServiceStatus;
   statusCode?: number;
   icon?: IconType;
   url?: string;
@@ -29,7 +31,9 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
   const statusColor = getStatusColorForCode(
     service.statusCode ?? 0,
-    config?.theme.colors.serviceStatus
+    service.status,
+    config?.theme.colors.serviceStatus,
+    config?.statusMapping
   );
   
   return (
@@ -65,6 +69,11 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         <p className="service-description">{service.description}</p>
         <div className="service-footer">
           <span className="status-label">{service.status}</span>
+          {service.url && (
+            <span className="clickable-indicator" title="Click to open service">
+              <FaExternalLinkAlt />
+            </span>
+          )}
         </div>
       </div>
     </div>

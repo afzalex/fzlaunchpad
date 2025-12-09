@@ -9,6 +9,13 @@ export interface ServerConfig {
 }
 
 export interface ThemeConfig {
+  backgroundImage?: {
+    url?: string;
+    opacity?: number;
+    position?: string;
+    size?: string;
+    repeat?: string;
+  };
   colors: {
     background: string;
     cardBackground: string;
@@ -20,9 +27,13 @@ export interface ThemeConfig {
     footerBackground?: string;
     footerText?: string;
     serviceStatus?: {
-      [key: string]: string; // e.g., "0", "200-299", "400-499", "500-599"
+      [key: string]: string; // Service status names to colors: "running", "stopped", "error", "warning"
     };
   };
+}
+
+export interface StatusMappingConfig {
+  [key: string]: string; // HTTP status codes/ranges to service status names: "0": "stopped", "200-299": "running", etc.
 }
 
 export interface ServiceConfig {
@@ -49,6 +60,7 @@ export interface AppConfig {
   server: ServerConfig;
   footer?: FooterConfig;
   theme: ThemeConfig;
+  statusMapping?: StatusMappingConfig;
   services?: ServiceConfig[];
 }
 
@@ -97,13 +109,19 @@ export async function loadConfig(): Promise<AppConfig> {
           footerBackground: '#fafaff',
           footerText: '#1c1c1c',
           serviceStatus: {
-            '0': '#808080',
-            '200-299': '#10b981',
-            '300-399': '#3b82f6',
-            '400-499': '#ef4444',
-            '500-599': '#f59e0b',
+            'running': '#10b981',
+            'stopped': '#808080',
+            'error': '#ef4444',
+            'warning': '#f59e0b',
           },
         },
+      },
+      statusMapping: {
+        '0': 'stopped',
+        '200-299': 'running',
+        '300-399': 'running',
+        '400-499': 'error',
+        '500-599': 'warning',
       },
     };
   }

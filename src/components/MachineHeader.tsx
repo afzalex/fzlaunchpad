@@ -13,7 +13,7 @@ export default function MachineHeader({
     <header className="machine-header">
       <div className="machine-header-content">
         <h1 className="machine-name">{machineName}</h1>
-        {subtitle && <p className="machine-subtitle"><div>{subtitle}</div></p>}
+        {subtitle && <div className="machine-subtitle"><div>{subtitle}</div></div>}
       </div>
     </header>
   );

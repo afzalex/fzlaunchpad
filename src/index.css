@@ -18,6 +18,13 @@
   --color-lightest-gray: #eef0f2;
   --color-background: #fafaff;
   
+  /* Background image - will be overridden by config */
+  --bg-image-url: none;
+  --bg-image-opacity: 0.1;
+  --bg-image-position: center;
+  --bg-image-size: cover;
+  --bg-image-repeat: no-repeat;
+  
   color: var(--color-darkest);
   background-color: var(--color-background);
 
@@ -30,8 +37,27 @@
 body {
   margin: 0;
   min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--bg-image-url);
+  background-position: var(--bg-image-position);
+  background-size: var(--bg-image-size);
+  background-repeat: var(--bg-image-repeat);
+  opacity: var(--bg-image-opacity);
+  z-index: -1;
+  pointer-events: none;
 }
 
 #root {
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }

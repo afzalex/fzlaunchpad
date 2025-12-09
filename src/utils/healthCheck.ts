@@ -1,4 +1,7 @@
-export type ServiceStatus = 'running' | 'stopped' | 'error' | 'warning';
+import type { AppConfig } from './configLoader';
+import { mapStatusCodeToStatus, type ServiceStatus } from './statusMapper';
+
+export type { ServiceStatus };
 
 export interface HealthCheckResult {
   status: ServiceStatus;
@@ -14,11 +17,15 @@ function isCorsError(error: unknown): boolean {
   return false;
 }
 
-export async function checkServiceHealth(healthCheckUrl: string): Promise<HealthCheckResult> {
+export async function checkServiceHealth(
+  healthCheckUrl: string,
+  statusMapping?: AppConfig['statusMapping']
+): Promise<HealthCheckResult> {
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
+    console.log(`Checking health of ${healthCheckUrl}`);
     // Try CORS request first
     let response: Response;
     try {
@@ -27,6 +34,7 @@ export async function checkServiceHealth(healthCheckUrl: string): Promise<Health
         signal: controller.signal,
         mode: 'cors',
       });
+      console.log(`Response: ${response.status} for ${healthCheckUrl}`);
     } catch (corsError) {
       // If CORS fails, try no-cors mode (but we won't get status code)
       if (isCorsError(corsError)) {
@@ -39,8 +47,9 @@ export async function checkServiceHealth(healthCheckUrl: string): Promise<Health
           });
           clearTimeout(timeoutId);
           // With no-cors, we can't read the response, but if it didn't throw, assume it's reachable
+          const assumedStatus = mapStatusCodeToStatus(200, statusMapping);
           return {
-            status: 'running',
+            status: assumedStatus,
             statusCode: 200, // Assume success if no-cors works
           };
         } catch {
@@ -53,16 +62,8 @@ export async function checkServiceHealth(healthCheckUrl: string): Promise<Health
 
     clearTimeout(timeoutId);
 
-    let status: ServiceStatus;
-    if (response.ok) {
-      status = 'running';
-    } else if (response.status >= 400 && response.status < 500) {
-      status = 'error';
-    } else if (response.status >= 500) {
-      status = 'warning';
-    } else {
-      status = 'stopped';
-    }
+    // Map HTTP status code to service status using configuration
+    const status = mapStatusCodeToStatus(response.status, statusMapping);
 
     return {
       status,
@@ -75,22 +76,25 @@ export async function checkServiceHealth(healthCheckUrl: string): Promise<Health
     } else {
       console.warn(`Health check failed for ${healthCheckUrl}:`, error);
     }
+    const status = mapStatusCodeToStatus(0, statusMapping);
     return {
-      status: 'stopped',
+      status,
       statusCode: 0,
     };
   }
 }
 
 export async function checkMultipleServices(
-  services: Array<{ healthCheckUrl?: string }>
+  services: Array<{ healthCheckUrl?: string }>,
+  statusMapping?: AppConfig['statusMapping']
 ): Promise<HealthCheckResult[]> {
   const promises = services.map((service) => {
     if (service.healthCheckUrl) {
-      return checkServiceHealth(service.healthCheckUrl);
+      return checkServiceHealth(service.healthCheckUrl, statusMapping);
     }
+    const status = mapStatusCodeToStatus(0, statusMapping);
     return Promise.resolve({
-      status: 'stopped' as ServiceStatus,
+      status,
       statusCode: 0,
     });
   });

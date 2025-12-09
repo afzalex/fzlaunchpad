@@ -4,10 +4,10 @@ server:
 
 services:
   - name: "Web Server"
-    description: "Main web application server running on port 8080"
+    description: "Main web application server running on port 5173"
     icon: "FaServer"
-    url: "http://localhost:59827"
-    healthCheckUrl: "http://localhost:59827/health"
+    url: "http://localhost:5173"
+    healthCheckUrl: "http://localhost:5173"
   - name: "Database"
     description: "PostgreSQL database instance"
     icon: "FaDatabase"
@@ -48,19 +48,33 @@ footer:
       url: "https://github.com/afzalex/fzlaunchpad"
 
 theme:
+  backgroundImage:
+    url: "/images/background.jpg"  # Background image URL (e.g., "/images/bg.jpg" or "https://example.com/bg.jpg")
+    opacity: 1                    # Background image opacity (0.0 to 1.0)
+    position: "center"              # Background position (center, top, bottom, left, right, etc.)
+    size: "cover"                  # Background size (cover, contain, auto, etc.)
+    repeat: "no-repeat"            # Background repeat (no-repeat, repeat, repeat-x, repeat-y)
   colors:
-    background: "#ecebe4"        # Main page background (lightest)
-    cardBackground: "#dddbcd"     # Service card backgrounds
+    background: "#ecebe4aa"        # Main page background (lightest)
+    cardBackground: "#dddbcdff"     # Service card backgrounds
     mediumAccent: "#2D531A"      # Borders and medium accents
     darkAccent: "#EEEEEE"         # Darker borders and accents
     text: "#071E07"              # Text color (darkest)
-    headerBackground: "#dddbcd"  # Header background color
+    headerBackground: "#dddbcd99"  # Header background color
     headerText: "#071E07"        # Header text color
-    footerBackground: "#dddbcd"  # Footer background color
+    footerBackground: "#dddbcd99"  # Footer background color
     footerText: "#071E07"        # Footer text color
     serviceStatus:
-      "0": "#808080"             # No response / Network error
-      "200-299": "#10b981"       # Success (2xx)
-      "300-399": "#3b82f6"       # Redirect (3xx)
-      "400-499": "#ef4444"       # Client error (4xx)
-      "500-599": "#f59e0b"       # Server error (5xx)
+      # Service Status Name to Color Mappings
+      "running": "#009d24"       # Running service color
+      "stopped": "#808080"       # Stopped service color
+      "error": "#ef4444"         # Error service color
+      "warning": "#f59e0b"       # Warning service color
+
+statusMapping:
+  # HTTP Status Code to Service Status Name Mappings
+  "0": "stopped"     
+  "200-299": "running"
+  "300-399": "uknown"
+  "400-499": "error"
+  "500-599": "warning"
