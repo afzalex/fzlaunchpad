@@ -3,9 +3,12 @@ import { mapStatusCodeToStatus, type ServiceStatus } from './statusMapper';
 
 export type { ServiceStatus };
 
+export type CheckMethod = 'normal' | 'no-cors' | 'error' | 'timeout' | 'no-url';
+
 export interface HealthCheckResult {
   status: ServiceStatus;
   statusCode: number;
+  checkMethod: CheckMethod;
 }
 
 function isCorsError(error: unknown): boolean {
@@ -34,7 +37,6 @@ export async function checkServiceHealth(
         signal: controller.signal,
         mode: 'cors',
       });
-      console.log(`Response: ${response.status} for ${healthCheckUrl}`);
     } catch (corsError) {
       // If CORS fails, try no-cors mode (but we won't get status code)
       if (isCorsError(corsError)) {
@@ -51,6 +53,7 @@ export async function checkServiceHealth(
           return {
             status: assumedStatus,
             statusCode: 200, // Assume success if no-cors works
+            checkMethod: 'no-cors',
           };
         } catch {
           clearTimeout(timeoutId);
@@ -68,6 +71,7 @@ export async function checkServiceHealth(
     return {
       status,
       statusCode: response.status,
+      checkMethod: 'normal',
     };
   } catch (error) {
     // Network error, CORS error, or timeout
@@ -77,9 +81,11 @@ export async function checkServiceHealth(
       console.warn(`Health check failed for ${healthCheckUrl}:`, error);
     }
     const status = mapStatusCodeToStatus(0, statusMapping);
+    const checkMethod: CheckMethod = error instanceof Error && error.name === 'AbortError' ? 'timeout' : 'error';
     return {
       status,
       statusCode: 0,
+      checkMethod,
     };
   }
 }
@@ -96,6 +102,7 @@ export async function checkMultipleServices(
     return Promise.resolve({
       status,
       statusCode: 0,
+      checkMethod: 'no-url' as CheckMethod,
     });
   });
 

@@ -1,0 +1,36 @@
+:80 {
+    root * /usr/share/caddy
+    file_server
+
+    # Enable gzip compression
+    encode gzip
+
+    # Security headers
+    header {
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+    }
+
+    # SPA routing - try files, fallback to index.html
+    try_files {path} {path}/ /index.html
+
+    # Cache static assets for 1 year
+    @static {
+        path *.js *.css *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot
+    }
+    header @static Cache-Control "public, max-age=31536000, immutable"
+
+    # Don't cache HTML files
+    @html {
+        path *.html
+    }
+    header @html Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+
+    # Don't cache config.yaml
+    @config {
+        path /config.yaml
+    }
+    header @config Cache-Control "no-store, no-cache, must-revalidate"
+}
+

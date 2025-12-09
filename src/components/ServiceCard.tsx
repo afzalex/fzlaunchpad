@@ -1,9 +1,9 @@
 import type { IconType } from 'react-icons';
-import { FaExternalLinkAlt } from 'react-icons/fa';
+import { FaExternalLinkAlt, FaExclamationTriangle } from 'react-icons/fa';
 import './ServiceCard.css';
 import { useConfig } from '../hooks/useConfig';
 import { getStatusColorForCode } from '../utils/statusColor';
-import type { ServiceStatus } from '../utils/healthCheck';
+import type { ServiceStatus, CheckMethod } from '../utils/healthCheck';
 
 export interface Service {
   id: string;
@@ -11,6 +11,7 @@ export interface Service {
   description: string;
   status: ServiceStatus;
   statusCode?: number;
+  checkMethod?: CheckMethod;
   icon?: IconType;
   url?: string;
 }
@@ -35,6 +36,8 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     config?.theme.colors.serviceStatus,
     config?.statusMapping
   );
+
+  const showNoCorsIndicator = service.checkMethod === 'no-cors';
   
   return (
     <div 
@@ -54,6 +57,11 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         style={{ '--status-color': statusColor } as React.CSSProperties}
       >
         <span className={`status-dot status-${service.status}`}></span>
+        {showNoCorsIndicator && (
+          <span className="check-method-indicator check-method-no-cors" title="Status via no-cors (CORS blocked, assumed reachable)">
+            <FaExclamationTriangle />
+          </span>
+        )}
       </div>
       <div className="service-card-header">
         <div className="service-title-row">

@@ -45,6 +45,7 @@ function App() {
           ...service,
           status: healthResults[index].status,
           statusCode: healthResults[index].statusCode,
+          checkMethod: healthResults[index].checkMethod,
         }))
       );
     };
@@ -60,6 +61,7 @@ function App() {
             ...service,
             status: healthResults[index].status,
             statusCode: healthResults[index].statusCode,
+            checkMethod: healthResults[index].checkMethod,
           }))
         );
       }
