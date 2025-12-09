@@ -33,7 +33,7 @@ export async function checkServiceHealth(
     let response: Response;
     try {
       response = await fetch(healthCheckUrl, {
-        method: 'HEAD',
+        method: 'GET',
         signal: controller.signal,
         mode: 'cors',
       });
@@ -43,7 +43,7 @@ export async function checkServiceHealth(
         console.warn(`CORS error for ${healthCheckUrl}, trying no-cors mode`);
         try {
           await fetch(healthCheckUrl, {
-            method: 'HEAD',
+            method: 'GET',
             signal: controller.signal,
             mode: 'no-cors',
           });
