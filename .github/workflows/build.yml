@@ -1,0 +1,65 @@
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Create ZIP archive
+        run: |
+          cd dist
+          zip -r ../fzlaunchpad.zip .
+
+      - name: Create tar.gz archive
+        run: |
+          cd dist
+          tar -czf ../fzlaunchpad.tar.gz .
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fzlaunchpad-zip
+          path: fzlaunchpad.zip
+          retention-days: 90
+
+      - name: Upload tar.gz artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fzlaunchpad-targz
+          path: fzlaunchpad.tar.gz
+          retention-days: 90
+
+      - name: Release ZIP
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          overwrite: true
+          files: |
+            fzlaunchpad.tar.gz
+            fzlaunchpad.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
