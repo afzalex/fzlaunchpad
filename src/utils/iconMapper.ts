@@ -1,4 +1,5 @@
 import type { IconType } from 'react-icons';
+import * as FaIcons from 'react-icons/fa';
 import * as MdIcons from 'react-icons/md';
 
 /**
@@ -7,27 +8,31 @@ import * as MdIcons from 'react-icons/md';
 const iconCache = new Map<string, IconType>();
 
 /**
- * Gets a Material Design icon by name.
- * Supports ALL icons from react-icons/md package dynamically.
+ * Gets an icon by name, supporting both Font Awesome and Material Design icons.
+ * Automatically detects the icon set based on the prefix (Fa* for Font Awesome, Md* for Material Design).
  * 
- * Icons are accessed from the imported namespace, allowing any Material Design
- * icon to be used without hardcoding. Icons are cached after first access
- * for better performance.
+ * Icons are accessed from the imported namespace, allowing any icon from either set
+ * to be used without hardcoding. Icons are cached after first access for better performance.
  * 
- * Material Design icon lists:
- * - https://fonts.google.com/icons
- * - https://react-icons.github.io/react-icons/icons/md/
+ * Icon lists:
+ * - Font Awesome: https://react-icons.github.io/react-icons/icons/fa/
+ * - Material Design: https://fonts.google.com/icons, https://react-icons.github.io/react-icons/icons/md/
  * 
- * @param iconName - The name of the icon (e.g., "MdHome", "MdSettings", "MdCloud", "MdRocket")
- *                   Must match the exact export name from react-icons/md
+ * @param iconName - The name of the icon (e.g., "FaServer", "MdHome", "FaDatabase", "MdSettings")
+ *                   Must match the exact export name from react-icons/fa or react-icons/md
+ *                   - Font Awesome icons start with "Fa" (e.g., "FaServer", "FaDatabase")
+ *                   - Material Design icons start with "Md" (e.g., "MdHome", "MdSettings")
  * @returns The icon component or undefined if not found
  * 
  * @example
  * ```typescript
- * // Works with any Material Design icon
+ * // Font Awesome icons
+ * const ServerIcon = getIcon('FaServer');
+ * const DatabaseIcon = getIcon('FaDatabase');
+ * 
+ * // Material Design icons
  * const HomeIcon = getIcon('MdHome');
- * const RocketIcon = getIcon('MdRocket');
- * const CustomIcon = getIcon('MdAccountCircle');
+ * const SettingsIcon = getIcon('MdSettings');
  * ```
  */
 export function getIcon(iconName: string): IconType | undefined {
@@ -35,7 +40,9 @@ export function getIcon(iconName: string): IconType | undefined {
     return iconCache.get(iconName);
   }
 
-  const iconModule = MdIcons as Record<string, IconType | undefined>;
+  // Determine icon set based on prefix
+  const isFontAwesome = iconName.startsWith('Fa');
+  const iconModule = (isFontAwesome ? FaIcons : MdIcons) as Record<string, IconType | undefined>;
   const Icon = iconModule[iconName];
 
   if (Icon && typeof Icon === 'function') {

@@ -15,31 +15,31 @@ server:
 services:
   - name: "Web Server"
     description: "Main web application server running on port 5173"
-    icon: "MdComputer"
+    icon: "MdComputer"           # Material Design icon (starts with "Md")
     url: "http://localhost:5173"
     healthCheckUrl: "http://localhost:5173"
   - name: "fzbox"
     description: "fzbox server"
-    icon: "MdStorage"
+    icon: "FaDatabase"           # Font Awesome icon (starts with "Fa")
     url: "https://fzbox.local"
     healthCheckUrl: "https://fzbox.local"
   - name: "API Service"
     description: "REST API backend service"
-    icon: "MdCode"
+    icon: "FaCode"               # Font Awesome icon
     url: "http://localhost:3000"
     healthCheckUrl: "http://localhost:3000/health"
   - name: "Docker"
     description: "Docker container management"
-    icon: "MdApps"
+    icon: "MdApps"               # Material Design icon
     url: "http://localhost:2375"
     healthCheckUrl: "http://localhost:2375"
   - name: "Cloud Storage"
     description: "Object storage service"
-    icon: "MdCloud"
+    icon: "FaCloud"               # Font Awesome icon
     healthCheckUrl: "http://localhost:9000/health"
   - name: "Network Monitor"
     description: "Network traffic monitoring service"
-    icon: "MdNetworkCheck"
+    icon: "MdNetworkCheck"       # Material Design icon
     healthCheckUrl: "http://localhost:9090/health"
 
 
