@@ -1,9 +1,9 @@
 import type { IconType } from 'react-icons';
 import { FaExternalLinkAlt, FaExclamationTriangle } from 'react-icons/fa';
 import './ServiceCard.css';
-import { useConfig } from '../hooks/useConfig';
-import { getStatusColorForCode } from '../utils/statusColor';
-import type { ServiceStatus, CheckMethod } from '../utils/healthCheck';
+import { useConfig } from '../../hooks/useConfig';
+import { getStatusColorForCode } from '../../utils/statusMapper';
+import type { ServiceStatus, CheckMethod } from '../../utils/healthCheck';
 
 export interface Service {
   id: string;
@@ -14,6 +14,7 @@ export interface Service {
   checkMethod?: CheckMethod;
   icon?: IconType;
   url?: string;
+  hasHealthCheckUrl?: boolean;
 }
 
 interface ServiceCardProps {
@@ -32,12 +33,11 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
   const statusColor = getStatusColorForCode(
     service.statusCode ?? 0,
-    service.status,
-    config?.theme.colors.serviceStatus,
-    config?.statusMapping
+    config?.theme.colors.serviceStatus
   );
 
   const showNoCorsIndicator = service.checkMethod === 'no-cors';
+  const hasHealthCheck = service.hasHealthCheckUrl ?? (service.checkMethod !== undefined && service.checkMethod !== 'no-url');
   
   return (
     <div 
@@ -52,17 +52,19 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         }
       }}
     >
-      <div 
-        className={`service-status-indicator status-${service.status}`}
-        style={{ '--status-color': statusColor } as React.CSSProperties}
-      >
-        <span className={`status-dot status-${service.status}`}></span>
-        {showNoCorsIndicator && (
-          <span className="check-method-indicator check-method-no-cors" title="Status via no-cors (CORS blocked, assumed reachable)">
-            <FaExclamationTriangle />
-          </span>
-        )}
-      </div>
+      {hasHealthCheck && (
+        <div 
+          className={`service-status-indicator status-${service.status}`}
+          style={{ '--status-color': statusColor } as React.CSSProperties}
+        >
+          <span className={`status-dot status-${service.status}`}></span>
+          {showNoCorsIndicator && (
+            <span className="check-method-indicator check-method-no-cors" title="Status via no-cors (CORS blocked, assumed reachable)">
+              <FaExclamationTriangle />
+            </span>
+          )}
+        </div>
+      )}
       <div className="service-card-header">
         <div className="service-title-row">
           {Icon && (

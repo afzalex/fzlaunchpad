@@ -1,8 +1,16 @@
 import yaml from 'js-yaml';
+import { DEFAULT_STATUS_MAPPING, DEFAULT_STATUS_COLORS } from './constants';
+
+export interface FooterItem {
+  type: 'text' | 'link';
+  content?: string;  // For text type
+  label?: string;    // For link type
+  url?: string;      // For link type
+}
 
 export interface ServerConfig {
   name: string;
-  subtitle?: string;
+  subtitle?: string | FooterItem[];  // Can be a simple string or array of items (same structure as footer)
   status?: string;
   uptime?: string;
   lastUpdated?: string;
@@ -27,7 +35,7 @@ export interface ThemeConfig {
     footerBackground?: string;
     footerText?: string;
     serviceStatus?: {
-      [key: string]: string; // Service status names to colors: "running", "stopped", "error", "warning"
+      [key: string]: string; // HTTP status codes/ranges to colors: "0": "#808080", "200-299": "#10b981", etc.
     };
   };
 }
@@ -44,16 +52,9 @@ export interface ServiceConfig {
   healthCheckUrl?: string;
 }
 
-export interface FooterItem {
-  type: 'text' | 'link';
-  content?: string;  // For text type
-  label?: string;    // For link type
-  url?: string;      // For link type
-}
-
 export interface FooterConfig {
   enabled?: boolean;
-  items?: FooterItem[];
+  content?: FooterItem[];  // Changed from 'items' to 'content'
 }
 
 export interface AppConfig {
@@ -90,12 +91,13 @@ export async function loadConfig(): Promise<AppConfig> {
       },
       footer: {
         enabled: true,
-        items: [
+        content: [
           {
             type: 'text',
             content: '© {year} Launchpad',
           },
         ],
+        // Attribution is automatically appended in Footer component
       },
       theme: {
         colors: {
@@ -108,21 +110,10 @@ export async function loadConfig(): Promise<AppConfig> {
           headerText: '#eef0f2',
           footerBackground: '#fafaff',
           footerText: '#1c1c1c',
-          serviceStatus: {
-            'running': '#10b981',
-            'stopped': '#808080',
-            'error': '#ef4444',
-            'warning': '#f59e0b',
-          },
+          serviceStatus: { ...DEFAULT_STATUS_COLORS },
         },
       },
-      statusMapping: {
-        '0': 'stopped',
-        '200-299': 'running',
-        '300-399': 'running',
-        '400-499': 'error',
-        '500-599': 'warning',
-      },
+      statusMapping: { ...DEFAULT_STATUS_MAPPING },
     };
   }
 }

@@ -1,5 +1,6 @@
 import './Footer.css';
-import { useConfig } from '../hooks/useConfig';
+import { useConfig } from '../../hooks/useConfig';
+import type { FooterItem } from '../../utils/configLoader';
 
 export default function Footer() {
   const { config } = useConfig();
@@ -9,14 +10,24 @@ export default function Footer() {
     return null;
   }
 
-  const items = config?.footer?.items || [
+  const content = config?.footer?.content || [
     { type: 'text' as const, content: '© {year} Launchpad' }
   ];
+
+  // Attribution is always appended - this ensures proper credit to the original author
+  // Removing this attribution violates the spirit of open source contribution
+  const attribution: FooterItem[] = [
+    { type: 'text', content: '|' },
+    { type: 'text', content: 'Built by' },
+    { type: 'link', label: 'afzalex', url: 'https://afzalex.com' }
+  ];
+  
+  const allContent = [...content, ...attribution];
   
   return (
     <footer className="app-footer">
       <div className="footer-content">
-        {items.map((item, index) => {
+        {allContent.map((item, index) => {
           if (item.type === 'text') {
             const displayText = (item.content || '').replace('{year}', currentYear.toString());
             return (
@@ -30,6 +41,8 @@ export default function Footer() {
                 key={index}
                 href={item.url}
                 className="footer-item footer-link"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {item.label || item.url}
               </a>

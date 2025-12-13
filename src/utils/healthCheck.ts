@@ -1,5 +1,6 @@
 import type { AppConfig } from './configLoader';
 import { mapStatusCodeToStatus, type ServiceStatus } from './statusMapper';
+import { HEALTH_CHECK_TIMEOUT_MS } from './constants';
 
 export type { ServiceStatus };
 
@@ -26,9 +27,8 @@ export async function checkServiceHealth(
 ): Promise<HealthCheckResult> {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), HEALTH_CHECK_TIMEOUT_MS);
 
-    console.log(`Checking health of ${healthCheckUrl}`);
     // Try CORS request first
     let response: Response;
     try {
@@ -36,6 +36,7 @@ export async function checkServiceHealth(
         method: 'GET',
         signal: controller.signal,
         mode: 'cors',
+        credentials: 'omit',
       });
     } catch (corsError) {
       // If CORS fails, try no-cors mode (but we won't get status code)
@@ -46,6 +47,7 @@ export async function checkServiceHealth(
             method: 'GET',
             signal: controller.signal,
             mode: 'no-cors',
+            credentials: 'omit',
           });
           clearTimeout(timeoutId);
           // With no-cors, we can't read the response, but if it didn't throw, assume it's reachable

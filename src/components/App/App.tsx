@@ -1,17 +1,33 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import MachineHeader from './components/MachineHeader';
-import ServiceCard from './components/ServiceCard';
-import Footer from './components/Footer';
-import type { Service } from './components/ServiceCard';
-import { useConfig } from './hooks/useConfig';
-import { getIcon } from './utils/iconMapper';
-import { checkMultipleServices, type ServiceStatus } from './utils/healthCheck';
+import MachineHeader from '../MachineHeader/MachineHeader';
+import ServiceCard from '../ServiceCard/ServiceCard';
+import Footer from '../Footer/Footer';
+import type { Service } from '../ServiceCard/ServiceCard';
+import { useConfig } from '../../hooks/useConfig';
+import { getIcon } from '../../utils/iconMapper';
+import { checkMultipleServices, type ServiceStatus, type HealthCheckResult } from '../../utils/healthCheck';
+import { HEALTH_CHECK_INTERVAL_MS } from '../../utils/constants';
 
 function App() {
   const { config, loading } = useConfig();
   const [services, setServices] = useState<Service[]>([]);
   const [servicesLoading, setServicesLoading] = useState(true);
+
+  /**
+   * Updates services state with health check results.
+   * Extracted to avoid code duplication.
+   */
+  const updateServicesWithHealthResults = (healthResults: HealthCheckResult[]) => {
+    setServices(prevServices => 
+      prevServices.map((service, index) => ({
+        ...service,
+        status: healthResults[index].status,
+        statusCode: healthResults[index].statusCode,
+        checkMethod: healthResults[index].checkMethod,
+      }))
+    );
+  };
 
   // Load services from config and check their health
   useEffect(() => {
@@ -31,6 +47,7 @@ function App() {
         status: 'stopped' as ServiceStatus, // Will be updated after health check
         icon: getIcon(serviceConfig.icon),
         url: serviceConfig.url,
+        hasHealthCheckUrl: !!serviceConfig.healthCheckUrl,
       }));
 
       setServices(servicesWithIcons);
@@ -38,34 +55,18 @@ function App() {
 
       // Then check health status for all services
       const healthResults = await checkMultipleServices(servicesList, config.statusMapping);
-      
-      // Update services with actual status and status code
-      setServices(prevServices => 
-        prevServices.map((service, index) => ({
-          ...service,
-          status: healthResults[index].status,
-          statusCode: healthResults[index].statusCode,
-          checkMethod: healthResults[index].checkMethod,
-        }))
-      );
+      updateServicesWithHealthResults(healthResults);
     };
 
     loadServices();
 
-    // Set up periodic health checks (every 30 seconds)
+    // Set up periodic health checks
     const intervalId = setInterval(async () => {
       if (servicesList && config) {
         const healthResults = await checkMultipleServices(servicesList, config.statusMapping);
-        setServices(prevServices => 
-          prevServices.map((service, index) => ({
-            ...service,
-            status: healthResults[index].status,
-            statusCode: healthResults[index].statusCode,
-            checkMethod: healthResults[index].checkMethod,
-          }))
-        );
+        updateServicesWithHealthResults(healthResults);
       }
-    }, 30000);
+    }, HEALTH_CHECK_INTERVAL_MS);
 
     return () => clearInterval(intervalId);
   }, [config]);
@@ -132,3 +133,4 @@ function App() {
 }
 
 export default App
+

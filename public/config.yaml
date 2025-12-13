@@ -1,41 +1,51 @@
 server:
   name: "fzmacair"
+  # Subtitle can be a simple string:
+  # subtitle: "Macbook Air of Mohammad Afzal"
+  #
+  # Or an array of items (like footer):
+  # subtitle:
+  #   - type: "text"
+  #     content: "Macbook Air"
+  #   - type: "link"
+  #     label: "View Details"
+  #     url: "https://example.com/details"
   subtitle: "Macbook Air of Mohammad Afzal"
 
 services:
   - name: "Web Server"
     description: "Main web application server running on port 5173"
-    icon: "FaServer"
+    icon: "MdComputer"
     url: "http://localhost:5173"
     healthCheckUrl: "http://localhost:5173"
   - name: "fzbox"
     description: "fzbox server"
-    icon: "FaDatabase"
+    icon: "MdStorage"
     url: "https://fzbox.local"
     healthCheckUrl: "https://fzbox.local"
   - name: "API Service"
     description: "REST API backend service"
-    icon: "FaCode"
+    icon: "MdCode"
     url: "http://localhost:3000"
     healthCheckUrl: "http://localhost:3000/health"
   - name: "Docker"
     description: "Docker container management"
-    icon: "FaDocker"
+    icon: "MdApps"
     url: "http://localhost:2375"
     healthCheckUrl: "http://localhost:2375"
   - name: "Cloud Storage"
     description: "Object storage service"
-    icon: "FaCloud"
+    icon: "MdCloud"
     healthCheckUrl: "http://localhost:9000/health"
   - name: "Network Monitor"
     description: "Network traffic monitoring service"
-    icon: "FaNetworkWired"
+    icon: "MdNetworkCheck"
     healthCheckUrl: "http://localhost:9090/health"
 
 
 footer:
   enabled: true                  # Show/hide footer
-  items:
+  content:                       # Changed from 'items' to 'content'
     - type: "text"
       content: "© {year} Launchpad"    # Use {year} for current year
     - type: "link"
@@ -65,11 +75,12 @@ theme:
     footerBackground: "#dddbcd99"  # Footer background color
     footerText: "#071E07"        # Footer text color
     serviceStatus:
-      # Service Status Name to Color Mappings
-      "running": "#009d24"       # Running service color
-      "stopped": "#808080"       # Stopped service color
-      "error": "#ef4444"         # Error service color
-      "warning": "#f59e0b"       # Warning service color
+      # HTTP Status Code to Color Mappings
+      "0": "#808080"             # Status code 0 (stopped/unreachable) color
+      "200-299": "#009d24"       # Status codes 200-299 (success) color
+      "300-399": "#3b82f6"       # Status codes 300-399 (redirect) color
+      "400-499": "#ef4444"       # Status codes 400-499 (client error) color
+      "500-599": "#f59e0b"       # Status codes 500-599 (server error) color
 
 statusMapping:
   # HTTP Status Code to Service Status Name Mappings

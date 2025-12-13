@@ -2,6 +2,8 @@
 
 A lightweight React TypeScript static website to display machine information and service statuses.
 
+**Built by [afzalex](https://afzalex.com)**
+
 ## Features
 
 - Display machine name and status in a header
@@ -61,3 +63,5 @@ Edit `public/config.yaml` to customize:
 - Theme colors and background image
 - Status mappings for HTTP status codes
 - Footer content
+
+**Note:** The footer automatically includes attribution to the original author (afzalex). This attribution is programmatically added and cannot be removed through configuration. Please respect the original author's work when using or modifying this project.
