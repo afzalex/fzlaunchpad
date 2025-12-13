@@ -11,6 +11,7 @@ export interface FooterItem {
 export interface ServerConfig {
   name: string;
   subtitle?: string | FooterItem[];  // Can be a simple string or array of items (same structure as footer)
+  headerContent?: string | FooterItem[];  // Additional customizable content at the bottom of header
   status?: string;
   uptime?: string;
   lastUpdated?: string;

@@ -121,6 +121,7 @@ function App() {
       <MachineHeader 
         machineName={config?.server.name || 'Server'}
         subtitle={config?.server.subtitle}
+        headerContent={config?.server.headerContent}
       />
       <main className="services-container">
         <div className="services-grid">

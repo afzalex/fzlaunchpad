@@ -26,12 +26,16 @@
   --bg-image-repeat: no-repeat;
   
   color: var(--color-darkest);
-  background-color: var(--color-background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  background-color: var(--color-background);
+  min-height: 100vh;
 }
 
 body {
@@ -59,5 +63,4 @@ body::before {
 #root {
   min-height: 100vh;
   position: relative;
-  z-index: 1;
 }

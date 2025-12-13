@@ -1,7 +1,7 @@
 server:
   name: "example server"
   # Subtitle can be a simple string:
-  # subtitle: "Macbook Air of Mohammad Afzal"
+  # subtitle: "Subtitle of the server"
   #
   # Or an array of items (like footer):
   subtitle:
@@ -10,7 +10,19 @@ server:
     - type: "link"
       label: "my example server"
       url: "https://example.com/details"
-  # subtitle: "Subtitle of the server"
+
+  
+  # Additional customizable content at the bottom of header
+  # Can be a simple string:
+  # headerContent: "Additional information here"
+  #
+  # Or an array of items (like footer and subtitle):
+  # headerContent:
+  #   - type: "text"
+  #     content: "Last updated: {year}"
+  #   - type: "link"
+  #     label: "View Details"
+  #     url: "https://example.com"
 
 services:
   - name: "Web Server"
@@ -49,8 +61,8 @@ footer:
 
 theme:
   backgroundImage:
-    url: "/images/background.jpg"  # Background image URL (e.g., "/images/bg.jpg" or "https://example.com/bg.jpg")
-    opacity: 1                    # Background image opacity (0.0 to 1.0)
+    url: "/images/background2.jpg"  # Background image URL (e.g., "/images/bg.jpg" or "https://example.com/bg.jpg")
+    opacity: 0.25                    # Background image opacity (0.0 to 1.0)
     position: "center"              # Background position (center, top, bottom, left, right, etc.)
     size: "cover"                  # Background size (cover, contain, auto, etc.)
     repeat: "no-repeat"            # Background repeat (no-repeat, repeat, repeat-x, repeat-y)
