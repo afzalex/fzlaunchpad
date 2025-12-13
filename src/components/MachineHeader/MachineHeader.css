@@ -38,15 +38,8 @@
   gap: 0.5rem;
 }
 
-.machine-subtitle > div {
-  display: inline-block;
-  padding-top: 0.5em;
-  padding-left: 5em;
-  padding-right: 5em;
-  border-top: 1px solid var(--color-header-text);
-}
 
-.subtitle-item {
+.machine-subtitle > .machine-subtitle-wrapper {
   display: inline-block;
   padding-top: 0.5em;
   padding-left: 5em;

@@ -15,6 +15,7 @@ export interface Service {
   icon?: IconType;
   url?: string;
   hasHealthCheckUrl?: boolean;
+  isChecking?: boolean;  // True if health check hasn't completed yet
 }
 
 interface ServiceCardProps {
@@ -31,8 +32,12 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     }
   };
 
+  // Show "checking" status if health check hasn't completed yet
+  const displayStatus = service.isChecking ? 'Checking status ...' : service.status;
+  const displayStatusCode = service.isChecking ? undefined : service.statusCode;
+  
   const statusColor = getStatusColorForCode(
-    service.statusCode ?? 0,
+    displayStatusCode,
     config?.theme.colors.serviceStatus
   );
 
@@ -41,7 +46,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
   
   return (
     <div 
-      className={`service-card status-${service.status} ${service.url ? 'clickable' : ''}`}
+      className={`service-card status-${displayStatus} ${service.url ? 'clickable' : ''}`}
       onClick={handleClick}
       role={service.url ? 'button' : undefined}
       tabIndex={service.url ? 0 : undefined}
@@ -54,10 +59,10 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     >
       {hasHealthCheck && (
         <div 
-          className={`service-status-indicator status-${service.status}`}
+          className={`service-status-indicator status-${displayStatus}`}
           style={{ '--status-color': statusColor } as React.CSSProperties}
         >
-          <span className={`status-dot status-${service.status}`}></span>
+          <span className={`status-dot status-${displayStatus}`}></span>
           {showNoCorsIndicator && (
             <span className="check-method-indicator check-method-no-cors" title="Status via no-cors (CORS blocked, assumed reachable)">
               <FaExclamationTriangle />
@@ -78,7 +83,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
       <div className="service-card-content">
         <p className="service-description">{service.description}</p>
         <div className="service-footer">
-          <span className="status-label">{service.status}</span>
+          <span className="status-label">{displayStatus}</span>
           {service.url && (
             <span className="clickable-indicator" title="Click to open service">
               <FaExternalLinkAlt />

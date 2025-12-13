@@ -81,6 +81,7 @@ theme:
       "300-399": "#3b82f6"       # Status codes 300-399 (redirect) color
       "400-499": "#ef4444"       # Status codes 400-499 (client error) color
       "500-599": "#f59e0b"       # Status codes 500-599 (server error) color
+      "checking": "#3b82f6"       # Status code checking color
 
 statusMapping:
   # HTTP Status Code to Service Status Name Mappings

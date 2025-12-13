@@ -25,6 +25,7 @@ function App() {
         status: healthResults[index].status,
         statusCode: healthResults[index].statusCode,
         checkMethod: healthResults[index].checkMethod,
+        isChecking: false, // Health check completed
       }))
     );
   };
@@ -44,10 +45,11 @@ function App() {
         id: `service-${index}`,
         name: serviceConfig.name,
         description: serviceConfig.description,
-        status: 'stopped' as ServiceStatus, // Will be updated after health check
+        status: 'checking' as ServiceStatus, // Show "checking" until first health check completes
         icon: getIcon(serviceConfig.icon),
         url: serviceConfig.url,
         hasHealthCheckUrl: !!serviceConfig.healthCheckUrl,
+        isChecking: !!serviceConfig.healthCheckUrl, // Mark as checking if it has a health check URL
       }));
 
       setServices(servicesWithIcons);

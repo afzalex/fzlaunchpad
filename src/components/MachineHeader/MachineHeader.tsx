@@ -17,33 +17,35 @@ export default function MachineHeader({
 
     // If it's a string, render it directly (backward compatible)
     if (typeof subtitle === 'string') {
-      return <div className="machine-subtitle"><div>{subtitle}</div></div>;
+      return <div className="machine-subtitle"><div className="machine-subtitle-wrapper">{subtitle}</div></div>;
     }
 
     // If it's an array of items, render them like footer
     return (
       <div className="machine-subtitle">
-        {subtitle.map((item, index) => {
-          if (item.type === 'text') {
-            const displayText = (item.content || '').replace('{year}', currentYear.toString());
-            return (
-              <span key={index} className="subtitle-item subtitle-text">
-                {displayText}
-              </span>
-            );
-          } else if (item.type === 'link' && item.url) {
-            return (
-              <a
-                key={index}
-                href={item.url}
-                className="subtitle-item subtitle-link"
-              >
-                {item.label || item.url}
-              </a>
-            );
-          }
-          return null;
-        })}
+        <div className="machine-subtitle-wrapper">
+          {subtitle.map((item, index) => {
+            if (item.type === 'text') {
+              const displayText = (item.content || '').replace('{year}', currentYear.toString());
+              return (
+                <span key={index} className="subtitle-item subtitle-text">
+                  {displayText}
+                </span>
+              );
+            } else if (item.type === 'link' && item.url) {
+              return (
+                <a
+                  key={index}
+                  href={item.url}
+                  className="subtitle-item subtitle-link"
+                >
+                  {item.label || item.url}
+                </a>
+              );
+            }
+            return null;
+          })}
+        </div>
       </div>
     );
   };

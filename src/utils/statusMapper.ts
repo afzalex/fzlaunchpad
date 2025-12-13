@@ -68,9 +68,15 @@ function getDefaultColorForStatusCode(statusCode: number): string {
  * Uses the same range parsing logic as statusMapping.
  */
 export function getStatusColorForCode(
-  statusCode: number,
+  statusCode: number | undefined,
   serviceStatus?: AppConfig['theme']['colors']['serviceStatus']
 ): string {
+  // Handle checking state (undefined statusCode means checking)
+  if (statusCode === undefined) {
+    // Return a neutral color for checking state (can be customized in config)
+    return serviceStatus?.['checking'] || '#3b82f6'; // Default to blue for checking
+  }
+
   if (!serviceStatus) {
     return getDefaultColorForStatusCode(statusCode);
   }
