@@ -17,12 +17,15 @@ export default function Footer() {
   // Attribution is always appended - this ensures proper credit to the original author
   // Removing this attribution violates the spirit of open source contribution
   const attribution: FooterItem[] = [
+    { type: 'text', content: '© {year}' },
+    { type: 'link', label: 'fzlaunchpad', url: 'https://github.com/afzalex/fzlaunchpad' },
     { type: 'text', content: '|' },
-    { type: 'text', content: 'Built by' },
-    { type: 'link', label: 'afzalex', url: 'https://afzalex.com' }
+    ...content,
+    { type: 'text', content: '| Built by' },
+    { type: 'link', label: 'Mohammad Afzal', url: 'https://afzalex.com' }
   ];
   
-  const allContent = [...content, ...attribution];
+  const allContent = attribution;
   
   return (
     <footer className="app-footer">

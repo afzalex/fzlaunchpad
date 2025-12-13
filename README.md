@@ -2,7 +2,9 @@
 
 A lightweight React TypeScript static website to display machine information and service statuses.
 
-**Built by [afzalex](https://afzalex.com)**
+**Built by [Mohammad Afzal](https://afzalex.com)**
+
+fzlaunchpad is a modern, configurable dashboard for monitoring service health and displaying machine information. It features real-time health checks, customizable themes, and support for both Font Awesome and Material Design icons.
 
 ## Features
 
@@ -64,4 +66,4 @@ Edit `public/config.yaml` to customize:
 - Status mappings for HTTP status codes
 - Footer content
 
-**Note:** The footer automatically includes attribution to the original author (afzalex). This attribution is programmatically added and cannot be removed through configuration. Please respect the original author's work when using or modifying this project.
+**Note:** The footer automatically includes attribution to the original author (Mohammad Afzal). This attribution is programmatically added and cannot be removed through configuration. Please respect the original author's work when using or modifying this project.

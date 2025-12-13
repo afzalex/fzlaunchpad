@@ -1,16 +1,16 @@
 server:
-  name: "fzmacair"
+  name: "example server"
   # Subtitle can be a simple string:
   # subtitle: "Macbook Air of Mohammad Afzal"
   #
   # Or an array of items (like footer):
-  # subtitle:
-  #   - type: "text"
-  #     content: "Macbook Air"
-  #   - type: "link"
-  #     label: "View Details"
-  #     url: "https://example.com/details"
-  subtitle: "Macbook Air of Mohammad Afzal"
+  subtitle:
+    - type: "text"
+      content: "Subtitle of the server"
+    - type: "link"
+      label: "my example server"
+      url: "https://example.com/details"
+  # subtitle: "Subtitle of the server"
 
 services:
   - name: "Web Server"
@@ -18,43 +18,33 @@ services:
     icon: "MdComputer"           # Material Design icon (starts with "Md")
     url: "http://localhost:5173"
     healthCheckUrl: "http://localhost:5173"
-  - name: "fzbox"
-    description: "fzbox server"
-    icon: "FaDatabase"           # Font Awesome icon (starts with "Fa")
-    url: "https://fzbox.local"
-    healthCheckUrl: "https://fzbox.local"
   - name: "API Service"
     description: "REST API backend service"
     icon: "FaCode"               # Font Awesome icon
     url: "http://localhost:3000"
     healthCheckUrl: "http://localhost:3000/health"
-  - name: "Docker"
-    description: "Docker container management"
-    icon: "MdApps"               # Material Design icon
-    url: "http://localhost:2375"
-    healthCheckUrl: "http://localhost:2375"
+  # - name: "Docker"
+  #   description: "Docker container management"
+  #   icon: "MdApps"               # Material Design icon
+  #   url: "http://localhost:2375"
+  #   healthCheckUrl: "http://localhost:2375"
   - name: "Cloud Storage"
     description: "Object storage service"
     icon: "FaCloud"               # Font Awesome icon
     healthCheckUrl: "http://localhost:9000/health"
-  - name: "Network Monitor"
-    description: "Network traffic monitoring service"
-    icon: "MdNetworkCheck"       # Material Design icon
-    healthCheckUrl: "http://localhost:9090/health"
+  # - name: "Network Monitor"
+  #   description: "Network traffic monitoring service"
+  #   icon: "MdNetworkCheck"       # Material Design icon
+  #   healthCheckUrl: "http://localhost:9090/health"
 
 
 footer:
   enabled: true                  # Show/hide footer
-  content:                       # Changed from 'items' to 'content'
+  content:
     - type: "text"
-      content: "© {year} Launchpad"    # Use {year} for current year
+      content: "Custom footer content"
     - type: "link"
-      label: "Documentation"
-      url: "https://example.com/docs"
-    - type: "text"
-      content: "|"
-    - type: "link"
-      label: "GitHub"
+      label: "with link"
       url: "https://github.com/afzalex/fzlaunchpad"
 
 theme:

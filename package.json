@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "author": "afzalex <https://afzalex.com>",
-  "description": "A lightweight React TypeScript static website to display machine information and service statuses. Built by afzalex.",
+  "author": "Mohammad Afzal <https://afzalex.com>",
+  "description": "A lightweight React TypeScript static website to display machine information and service statuses. Built by Mohammad Afzal.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
