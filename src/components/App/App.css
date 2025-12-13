@@ -7,7 +7,7 @@
 .services-container {
   flex: 1;
   padding: 4rem 2rem 4rem 2rem;
-  background: linear-gradient(135deg, var(--color-background) 0%, color-mix(in srgb, var(--color-background) 95%, var(--color-lightest-gray)) 100%);
+  background: transparent;
 }
 
 .services-grid {

@@ -11,6 +11,18 @@ server:
       label: "my example server"
       url: "https://example.com/details"
   # subtitle: "Subtitle of the server"
+  
+  # Additional customizable content at the bottom of header
+  # Can be a simple string:
+  # headerContent: "Additional information here"
+  #
+  # Or an array of items (like footer and subtitle):
+  # headerContent:
+  #   - type: "text"
+  #     content: "Last updated: {year}"
+  #   - type: "link"
+  #     label: "View Details"
+  #     url: "https://example.com"
 
 services:
   - name: "Web Server"
@@ -49,20 +61,20 @@ footer:
 
 theme:
   backgroundImage:
-    url: "/images/background.jpg"  # Background image URL (e.g., "/images/bg.jpg" or "https://example.com/bg.jpg")
+    url: "/images/background1.jpg"  # Background image URL (e.g., "/images/bg.jpg" or "https://example.com/bg.jpg")
     opacity: 1                    # Background image opacity (0.0 to 1.0)
     position: "center"              # Background position (center, top, bottom, left, right, etc.)
     size: "cover"                  # Background size (cover, contain, auto, etc.)
     repeat: "no-repeat"            # Background repeat (no-repeat, repeat, repeat-x, repeat-y)
   colors:
-    background: "#ecebe4aa"        # Main page background (lightest)
-    cardBackground: "#dddbcdff"     # Service card backgrounds
+    background: "#f3feff"        # Main page background (lightest)
+    cardBackground: "#e7f1f2"     # Service card backgrounds
     mediumAccent: "#2D531A"      # Borders and medium accents
     darkAccent: "#EEEEEE"         # Darker borders and accents
     text: "#071E07"              # Text color (darkest)
-    headerBackground: "#dddbcd99"  # Header background color
+    headerBackground: "#d2dfe0"  # Header background color
     headerText: "#071E07"        # Header text color
-    footerBackground: "#dddbcd99"  # Footer background color
+    footerBackground: "#d2dfe0"  # Footer background color
     footerText: "#071E07"        # Footer text color
     serviceStatus:
       # HTTP Status Code to Color Mappings

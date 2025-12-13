@@ -65,6 +65,40 @@
   text-decoration: underline;
 }
 
+.machine-header-content-bottom {
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-top: 1rem;
+  color: var(--color-header-text);
+  opacity: 0.7;
+}
+
+.machine-header-content-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.header-content-item.header-content-text {
+  color: var(--color-header-text);
+  opacity: 0.7;
+  white-space: pre;
+}
+
+.header-content-item.header-content-link {
+  color: var(--color-header-text);
+  opacity: 0.7;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.header-content-item.header-content-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
 .machine-info {
   display: flex;
   flex-wrap: wrap;
