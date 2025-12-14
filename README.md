@@ -1,10 +1,39 @@
-# fzlaunchpad
+# <img src="public/favicon.png" alt="fzlaunchpad" width="32" height="32"> fzlaunchpad
 
 A lightweight React TypeScript static website to display machine information and service statuses.
 
 **Built by [Mohammad Afzal](https://afzalex.com)**
 
 fzlaunchpad is a modern, configurable dashboard for monitoring service health and displaying machine information. It features real-time health checks, customizable themes, and support for both Font Awesome and Material Design icons.
+
+![fzlaunchpad Screenshot](screenshot.png)
+
+## Quick Start
+
+Create a minimal `public/config.yaml` file:
+
+```yaml
+server:
+  name: "My Server"
+
+services:
+  - name: "Web Server"
+    description: "Main web application"
+    icon: "MdComputer"
+    url: "http://localhost:5173"
+    healthCheckUrl: "http://localhost:5173"
+  - name: "API Service"
+    description: "REST API backend"
+    icon: "FaCode"
+    url: "http://localhost:3000"
+    healthCheckUrl: "http://localhost:3000/health"
+```
+
+**Expected UI Result:**
+- Header displaying "My Server"
+- Two service cards: "Web Server" and "API Service"
+- Real-time health status indicators (colored dots) for each service
+- Clickable cards that open the service URLs
 
 ## Features
 
@@ -29,33 +58,40 @@ The build artifacts contain the complete static website ready to deploy. No need
 
 ## Docker
 
-### Pull from Docker Hub
+### Docker Compose
 
-Pre-built Docker images are automatically pushed to Docker Hub on every push to main/master:
+```yaml
+version: '3.8'
 
-```bash
-docker pull afzalex/fzlaunchpad:latest
-docker run -d -p 8080:80 afzalex/fzlaunchpad:latest
+services:
+  fzlaunchpad:
+    image: afzalex/fzlaunchpad:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public/config.yaml:/usr/share/caddy/config.yaml:ro
+      - ./public/images:/usr/share/caddy/images:ro
+    restart: unless-stopped
 ```
 
-### Build the Docker image locally
+```bash
+docker-compose up -d
+```
+
+### Docker Run
+
+```bash
+docker run -d -p 8080:80 \
+  -v /path/to/your/config.yaml:/usr/share/caddy/config.yaml:ro \
+  afzalex/fzlaunchpad:latest
+```
+
+### Build Locally
 
 ```bash
 docker build -t fzlaunchpad .
 docker run -d -p 8080:80 fzlaunchpad
 ```
-
-The application will be available at `http://localhost:8080`.
-
-### Customize configuration
-
-To use a custom `config.yaml`, you can mount it as a volume:
-
-```bash
-docker run -d -p 8080:80 -v /path/to/your/config.yaml:/usr/share/caddy/config.yaml fzlaunchpad
-```
-
-Or rebuild the image with your config file in the `public/` directory.
 
 ## Configuration
 
