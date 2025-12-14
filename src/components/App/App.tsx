@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import MachineHeader from '../MachineHeader/MachineHeader';
 import ServiceCard from '../ServiceCard/ServiceCard';
@@ -8,6 +8,8 @@ import { useConfig } from '../../hooks/useConfig';
 import { getIcon } from '../../utils/iconMapper';
 import { checkMultipleServices, type ServiceStatus, type HealthCheckResult } from '../../utils/healthCheck';
 import { HEALTH_CHECK_INTERVAL_MS } from '../../utils/constants';
+import { replacePlaceholders } from '../../utils/placeholderReplacer';
+import { processServiceConfigs } from '../../utils/configProcessor';
 
 function App() {
   const { config, loading } = useConfig();
@@ -30,18 +32,27 @@ function App() {
     );
   };
 
+  // Process services config once when config changes (replace placeholders)
+  const processedServices = useMemo(() => {
+    if (!config?.services) return [];
+    return processServiceConfigs(config.services);
+  }, [config?.services]);
+
+  // Process server name once when config changes
+  const processedServerName = useMemo(() => {
+    return config?.server.name ? replacePlaceholders(config.server.name) : 'Server';
+  }, [config?.server.name]);
+
   // Load services from config and check their health
   useEffect(() => {
-    if (!config || !config.services) {
+    if (!config || !processedServices.length) {
       setServicesLoading(false);
       return;
     }
 
-    const servicesList = config.services;
-
     const loadServices = async () => {
-      // First, create services with icons mapped
-      const servicesWithIcons: Service[] = servicesList.map((serviceConfig, index) => ({
+      // Create services with icons mapped (placeholders already replaced in processedServices)
+      const servicesWithIcons: Service[] = processedServices.map((serviceConfig, index) => ({
         id: `service-${index}`,
         name: serviceConfig.name,
         description: serviceConfig.description,
@@ -55,8 +66,8 @@ function App() {
       setServices(servicesWithIcons);
       setServicesLoading(false);
 
-      // Then check health status for all services
-      const healthResults = await checkMultipleServices(servicesList, config.statusMapping);
+      // Check health status for all services (healthCheckUrl already has placeholders replaced)
+      const healthResults = await checkMultipleServices(processedServices, config.statusMapping);
       updateServicesWithHealthResults(healthResults);
     };
 
@@ -64,14 +75,14 @@ function App() {
 
     // Set up periodic health checks
     const intervalId = setInterval(async () => {
-      if (servicesList && config) {
-        const healthResults = await checkMultipleServices(servicesList, config.statusMapping);
+      if (processedServices.length && config) {
+        const healthResults = await checkMultipleServices(processedServices, config.statusMapping);
         updateServicesWithHealthResults(healthResults);
       }
     }, HEALTH_CHECK_INTERVAL_MS);
 
     return () => clearInterval(intervalId);
-  }, [config]);
+  }, [config, processedServices]);
 
   // Apply CSS variables from config
   useEffect(() => {
@@ -119,7 +130,7 @@ function App() {
   return (
     <div className="app">
       <MachineHeader 
-        machineName={config?.server.name || 'Server'}
+        machineName={processedServerName}
         subtitle={config?.server.subtitle}
         headerContent={config?.server.headerContent}
       />

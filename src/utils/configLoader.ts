@@ -6,6 +6,7 @@ export interface FooterItem {
   content?: string;  // For text type
   label?: string;    // For link type
   url?: string;      // For link type
+  target?: string;   // For link type - HTML target attribute (e.g., "_blank", "_self", "_parent", "_top")
 }
 
 export interface ServerConfig {
