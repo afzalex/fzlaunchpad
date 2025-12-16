@@ -1,0 +1,68 @@
+.no-config {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: var(--color-background, #fafaff);
+  color: var(--color-darkest, #1c1c1c);
+}
+
+.no-config-content {
+  max-width: 600px;
+  text-align: center;
+  background-color: var(--color-lightest-gray, #eef0f2);
+  padding: 3rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-config-content h1 {
+  margin: 0 0 1.5rem 0;
+  color: var(--color-darkest, #1c1c1c);
+  font-size: 2rem;
+}
+
+.no-config-content p {
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+.no-config-content ul {
+  text-align: left;
+  display: inline-block;
+  margin: 1.5rem 0;
+  padding-left: 2rem;
+}
+
+.no-config-content li {
+  margin: 0.5rem 0;
+}
+
+.no-config-content code {
+  background-color: var(--color-medium-accent, #ecebe4);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.no-config-hint {
+  font-style: italic;
+  color: var(--color-darkest, #1c1c1c);
+  font-size: 0.9rem;
+}
+
+.no-config-docs {
+  margin-top: 2rem;
+}
+
+.no-config-docs a {
+  color: var(--color-header-background, #1c1c1c);
+  text-decoration: underline;
+}
+
+.no-config-docs a:hover {
+  opacity: 0.8;
+}
+

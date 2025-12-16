@@ -11,8 +11,8 @@ export default defineConfig({
     react(),
     {
       name: 'disable-spa-fallback',
+      enforce: 'pre',
       configureServer(server) {
-        const root = server.config.root ?? process.cwd();
         const publicDir = server.config.publicDir;
     
         const exists = (p: string) => {
@@ -22,34 +22,14 @@ export default defineConfig({
         return () => {
           server.middlewares.use((req, res, next) => {
             const url = (req.originalUrl ?? "/").split("?")[0];
-    
-            // allow vite internals
-            if (
-              url.startsWith("/@") ||
-              url.startsWith("/__vite") ||
-              url === "/favicon.ico"
-            ) return next();
-    
-            // allow normal HTML entry
-            if (url === "/" || url === "/index.html") return next();
-    
-            // If it looks like a file request, let Vite handle (or 404 if missing)
-            if (path.posix.extname(url)) return next();
-    
-            // If a matching file exists in root, allow
-            const fsPath = path.join(root, url);
-            if (exists(fsPath) || exists(fsPath + ".html")) return next();
-    
-            // If exists in public/, allow
-            if (publicDir) {
-              const pubPath = path.join(publicDir, url);
-              if (exists(pubPath)) return next();
+
+            if (path.posix.extname(url) && publicDir && !exists(path.join(publicDir, url))) {
+              res.statusCode = 404;
+              res.setHeader("Content-Type", "text/plain; charset=utf-8");
+              res.end("404 Not Found");
+              return;
             }
-    
-            // Otherwise: 404 (no SPA fallback)
-            res.statusCode = 404;
-            res.setHeader("Content-Type", "text/plain; charset=utf-8");
-            res.end("404 Not Found");
+            next();
           })
         }
       },

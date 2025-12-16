@@ -1,5 +1,4 @@
 import yaml from 'js-yaml';
-import { DEFAULT_STATUS_MAPPING, DEFAULT_STATUS_COLORS } from './constants';
 
 export interface FooterItem {
   type: 'text' | 'link';
@@ -74,50 +73,28 @@ export async function loadConfig(): Promise<AppConfig> {
     return cachedConfig;
   }
 
-  try {
-    const response = await fetch('/config.yaml');
-    if (!response.ok) {
-      throw new Error(`Failed to load config: ${response.statusText}`);
+  // Try config files in order: config.yaml, config1.yaml, config2.yaml, config3.yaml
+  const configFiles = ['/config.yaml', '/config1.yaml', '/config2.yaml', '/config3.yaml'];
+  
+  for (const configFile of configFiles) {
+    try {
+      const response = await fetch(configFile);
+      if (response.ok) {
+        const yamlText = await response.text();
+        const config = yaml.load(yamlText) as AppConfig;
+        cachedConfig = config;
+        return config;
+      }
+    } catch (error) {
+      // Continue to next config file if this one fails
+      continue;
     }
-    const yamlText = await response.text();
-    const config = yaml.load(yamlText) as AppConfig;
-    cachedConfig = config;
-    return config;
-  } catch (error) {
-    console.error('Error loading config:', error);
-    // Return default config if loading fails
-    return {
-      server: {
-        name: 'Server',
-        status: 'Online',
-      },
-      footer: {
-        enabled: true,
-        content: [
-          {
-            type: 'text',
-            content: '© {year} Launchpad',
-          },
-        ],
-        // Attribution is automatically appended in Footer component
-      },
-      theme: {
-        colors: {
-          background: '#fafaff',
-          cardBackground: '#eef0f2',
-          mediumAccent: '#ecebe4',
-          darkAccent: '#daddd8',
-          text: '#1c1c1c',
-          headerBackground: '#1c1c1c',
-          headerText: '#eef0f2',
-          footerBackground: '#fafaff',
-          footerText: '#1c1c1c',
-          serviceStatus: { ...DEFAULT_STATUS_COLORS },
-        },
-      },
-      statusMapping: { ...DEFAULT_STATUS_MAPPING },
-    };
   }
+
+  // If all config files failed, throw an error
+  const errorMessage = `No configuration file found. Tried: ${configFiles.join(', ')}`;
+  console.error('Error loading config:', errorMessage);
+  throw new Error(errorMessage);
 }
 
 export function getColor(colorKey: Exclude<keyof ThemeConfig['colors'], 'serviceStatus'>): string {

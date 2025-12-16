@@ -3,6 +3,7 @@ import './App.css';
 import MachineHeader from '../MachineHeader/MachineHeader';
 import ServiceCard from '../ServiceCard/ServiceCard';
 import Footer from '../Footer/Footer';
+import NoConfig from '../NoConfig/NoConfig';
 import type { Service } from '../ServiceCard/ServiceCard';
 import { useConfig } from '../../hooks/useConfig';
 import { getIcon } from '../../utils/iconMapper';
@@ -12,7 +13,7 @@ import { replacePlaceholders } from '../../utils/placeholderReplacer';
 import { processServiceConfigs } from '../../utils/configProcessor';
 
 function App() {
-  const { config, loading } = useConfig();
+  const { config, loading, error } = useConfig();
   const [services, setServices] = useState<Service[]>([]);
   const [servicesLoading, setServicesLoading] = useState(true);
 
@@ -41,7 +42,7 @@ function App() {
   // Process server name once when config changes
   const processedServerName = useMemo(() => {
     return config?.server.name ? replacePlaceholders(config.server.name) : 'Server';
-  }, [config?.server.name]);
+  }, [config?.server?.name]);
 
   // Load services from config and check their health
   useEffect(() => {
@@ -125,6 +126,13 @@ function App() {
         <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
       </div>
     );
+  }
+
+  console.log('config', config);
+  
+  // Show NoConfig component if no config file was found
+  if (error && !config) {
+    return <NoConfig />;
   }
 
   return (
