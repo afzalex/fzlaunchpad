@@ -127,8 +127,6 @@ function App() {
       </div>
     );
   }
-
-  console.log('config', config);
   
   // Show NoConfig component if no config file was found
   if (error && !config) {

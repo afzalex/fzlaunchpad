@@ -68,13 +68,20 @@ export async function checkServiceHealth(
     }
 
     clearTimeout(timeoutId);
+    
+    let responseStatus = response.status;
+    if (responseStatus === 0) {
+      if (response.type === 'opaqueredirect') {
+        responseStatus = 302;
+      }
+    }
 
     // Map HTTP status code to service status using configuration
-    const status = mapStatusCodeToStatus(response.status, statusMapping);
+    const serviceStatus = mapStatusCodeToStatus(responseStatus, statusMapping);
 
     return {
-      status,
-      statusCode: response.status,
+      status: serviceStatus,
+      statusCode: responseStatus,
       checkMethod: 'normal',
     };
   } catch (error) {
