@@ -37,6 +37,7 @@ export async function checkServiceHealth(
         signal: controller.signal,
         mode: 'cors',
         credentials: 'omit',
+        redirect: 'manual'
       });
     } catch (corsError) {
       // If CORS fails, try no-cors mode (but we won't get status code)
@@ -48,6 +49,7 @@ export async function checkServiceHealth(
             signal: controller.signal,
             mode: 'no-cors',
             credentials: 'omit',
+            redirect: 'manual'
           });
           clearTimeout(timeoutId);
           // With no-cors, we can't read the response, but if it didn't throw, assume it's reachable
