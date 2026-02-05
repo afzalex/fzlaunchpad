@@ -48,11 +48,11 @@ services:
 
 Pre-built packages are automatically created on every push to main/master:
 
-1. **GitHub Releases**: Go to the [Releases](https://github.com/yourusername/fzlaunchpad/releases) page to download the latest build. Each push creates a new release with:
+1. **GitHub Releases**: Go to the [Releases](https://github.com/afzalex/fzlaunchpad/releases) page to download the latest build. Each push creates a new release with:
    - `fzlaunchpad.zip` - ZIP archive
    - `fzlaunchpad.tar.gz` - tar.gz archive
 
-2. **GitHub Actions Artifacts**: Alternatively, go to the [Actions](https://github.com/yourusername/fzlaunchpad/actions) tab, select the latest workflow run, and download the artifacts directly.
+2. **GitHub Actions Artifacts**: Alternatively, go to the [Actions](https://github.com/afzalex/fzlaunchpad/actions) tab, select the latest workflow run, and download the artifacts directly.
 
 The build artifacts contain the complete static website ready to deploy. No need to build from source - just download and deploy!
 
