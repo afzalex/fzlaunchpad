@@ -1,9 +1,14 @@
 :80 {
     root * /usr/share/caddy
-    file_server
 
     # Enable gzip compression
     encode gzip
+
+    # Set correct MIME types for JavaScript files (including service worker)
+    @js {
+        path *.js
+    }
+    header @js Content-Type "application/javascript; charset=utf-8"
 
     # Security headers
     header {
@@ -12,8 +17,25 @@
         X-XSS-Protection "1; mode=block"
     }
 
-    # SPA routing - try files, fallback to index.html
-    try_files {path} {path}/ /index.html
+    # Handle requests for actual files (with extensions) - serve them directly, return 404 if not found
+    @files {
+        path *.js *.css *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot *.yaml *.yml *.json *.xml *.txt
+    }
+    handle @files {
+        file_server
+        # If file_server doesn't find the file, it will return 404 automatically
+        # This handle block stops here and doesn't fall through
+    }
+
+    # Handle SPA routes (paths without file extensions) - fallback to index.html
+    # This only matches paths that don't have file extensions
+    @spa {
+        not path *.js *.css *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot *.yaml *.yml *.json *.xml *.txt *.html
+    }
+    handle @spa {
+        rewrite * /index.html
+        file_server
+    }
 
     # Cache static assets for 1 year
     @static {
