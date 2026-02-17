@@ -89,8 +89,8 @@ self.addEventListener('fetch', (event) => {
     return; // Let browser handle non-cacheable requests
   }
 
-  // For HTML requests, try network first, fallback to cache
-  if (request.headers.get('accept')?.includes('text/html') || url.pathname === '/') {
+  // For config.yaml requests, try network first, fallback to cache
+  if (request.headers.get('accept')?.includes('text/html') || url.pathname === '/config.yaml') {
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -117,7 +117,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // For other assets (JS, CSS, images, config files), cache first, fallback to network
+  // For other assets (JS, CSS, images, html files), cache first, fallback to network
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
       if (cachedResponse) {
