@@ -1,7 +1,7 @@
 {
   "name": "fzlaunchpad",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.1",
   "type": "module",
   "author": "Mohammad Afzal <https://afzalex.com>",
   "description": "A lightweight React TypeScript static website to display machine information and service statuses. Built by Mohammad Afzal.",

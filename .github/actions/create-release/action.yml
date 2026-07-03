@@ -1,0 +1,38 @@
+name: Create GitHub release
+description: Create a semver GitHub release with build artifacts
+
+inputs:
+  tag:
+    description: Git tag to create the release for
+    required: true
+  version:
+    description: Package version from package.json
+    required: true
+  zip-path:
+    description: Path to the ZIP archive
+    required: false
+    default: fzlaunchpad.zip
+  targz-path:
+    description: Path to the tar.gz archive
+    required: false
+    default: fzlaunchpad.tar.gz
+  github-token:
+    description: GitHub token with contents write access
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v3
+      with:
+        tag_name: ${{ inputs.tag }}
+        name: v${{ inputs.version }}
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+        files: |
+          ${{ inputs.zip-path }}
+          ${{ inputs.targz-path }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}

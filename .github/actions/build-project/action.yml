@@ -1,0 +1,37 @@
+name: Build project
+description: Install dependencies, build the app, and package dist archives
+
+inputs:
+  node-version:
+    description: Node.js version to use for the build
+    required: false
+    default: '20'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: npm
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci
+
+    - name: Build project
+      shell: bash
+      run: npm run build
+
+    - name: Create ZIP archive
+      shell: bash
+      run: |
+        cd dist
+        zip -r ../fzlaunchpad.zip .
+
+    - name: Create tar.gz archive
+      shell: bash
+      run: |
+        cd dist
+        tar -czf ../fzlaunchpad.tar.gz .

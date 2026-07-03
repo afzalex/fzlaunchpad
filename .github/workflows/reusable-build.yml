@@ -1,0 +1,41 @@
+name: Reusable Build
+
+on:
+  workflow_call:
+    outputs:
+      version:
+        description: Package version from package.json
+        value: ${{ jobs.build.outputs.version }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.read_version.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Read version from package.json
+        id: read_version
+        uses: ./.github/actions/read-version
+
+      - name: Build and package project
+        uses: ./.github/actions/build-project
+        with:
+          node-version: '20'
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: fzlaunchpad-zip
+          path: fzlaunchpad.zip
+          retention-days: 90
+
+      - name: Upload tar.gz artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: fzlaunchpad-targz
+          path: fzlaunchpad.tar.gz
+          retention-days: 90
