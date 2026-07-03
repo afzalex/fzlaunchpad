@@ -26,28 +26,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Check if release tag already exists
-        id: tag_check
-        uses: ./.github/actions/check-release-tag
-        with:
-          version: ${{ needs.build.outputs.version }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Download ZIP artifact
-        if: steps.tag_check.outputs.exists != 'true'
         uses: actions/download-artifact@v8
         with:
           name: fzlaunchpad-zip
           path: .
 
       - name: Download tar.gz artifact
-        if: steps.tag_check.outputs.exists != 'true'
         uses: actions/download-artifact@v8
         with:
           name: fzlaunchpad-targz
           path: .
 
-      - name: Create GitHub Release
+      - name: Update latest release
+        uses: ./.github/actions/update-latest-release
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check if semver release tag already exists
+        id: tag_check
+        uses: ./.github/actions/check-release-tag
+        with:
+          version: ${{ needs.build.outputs.version }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create semver GitHub Release
         if: steps.tag_check.outputs.exists != 'true'
         uses: ./.github/actions/create-release
         with:

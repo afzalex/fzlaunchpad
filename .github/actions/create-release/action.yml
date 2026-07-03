@@ -29,6 +29,7 @@ runs:
         tag_name: ${{ inputs.tag }}
         name: v${{ inputs.version }}
         generate_release_notes: true
+        make_latest: false
         draft: false
         prerelease: false
         files: |
